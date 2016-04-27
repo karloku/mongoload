@@ -5,3 +5,7 @@ rvm:
   - "2.1.10"
   - "2.2.4"
   - "2.3.0"
+gemfile:
+  - gemfiles/mongoid_50.gemfile
+  - gemfiles/mongoid_51.gemfile
+  - gemfiles/mongoid_master.gemfile
