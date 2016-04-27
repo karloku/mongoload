@@ -5,11 +5,15 @@ require 'mongoload'
 
 # initialize model definitions
 ENV['MONGOID_ENV'] = 'test'
+
+Mongo::Logger.logger = Logger.new('log/test.log')
+
 Mongoid.load!(File.join(File.dirname(__FILE__), 'db', 'mongoid.yml'))
 require_relative 'db/models'
-# Mongo::Logger.logger = ActiveSupport::Logger.new(STDOUT) # show actual mongo loads
 
 RSpec.configure do |config|
+  config.order = 'random'
+
   config.before(:suite) do
     DatabaseCleaner.strategy = :Truncation
     DatabaseCleaner.clean_with(:truncation)

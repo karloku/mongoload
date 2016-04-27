@@ -4,3 +4,5 @@
 /pkg/
 /vendor/cache/*.gem
 .byebug_history
+/log/*
+!/log/.keep

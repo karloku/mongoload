@@ -119,4 +119,20 @@ describe Mongoload do
       end
     end
   end
+
+  describe 'has_and_belongs_to_many' do
+    before { post1 && post2 && post3 && post4 && post5 && post6 }
+
+    it 'should eager load' do
+      posts = Post.all.to_a
+      posts.each do |post|
+        expect(post.tags._loaded?).to be false
+      end
+
+      posts.first.tags.to_a
+      posts.each do |post|
+        expect(post.tags._loaded?).to be true
+      end
+    end
+  end
 end
