@@ -13,7 +13,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   config.before(:suite) do
-    DatabaseCleaner.strategy = :Truncation
+    DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
   end
 
