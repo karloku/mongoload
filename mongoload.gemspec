@@ -8,7 +8,7 @@ require 'mongoload/version'
 Gem::Specification.new do |gem|
   gem.name          = 'mongoload'
   gem.version       = Mongoload::VERSION
-  gem.summary       = 'Automatically eager loading for Mongoid'
+  gem.summary       = 'Perform eager loading automatically for Mongoid'
   gem.description   = 'Automatic Mongoid eager loading'
   gem.license       = 'MIT'
   gem.authors       = ['Kaloku Sang']

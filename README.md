@@ -1,24 +1,30 @@
-# mongoload
+# Mongoload
 
-* [Homepage](https://rubygems.org/gems/mongoload)
-* [Documentation](http://rubydoc.info/gems/mongoload/frames)
-* [Email](mailto:karloku at gmail.com)
+[![Build Status](https://travis-ci.org/karloku/mongoload.svg?branch=master)](https://travis-ci.org/karloku/mongoload)
 
-## Description
+Mongoload is a gem to perform eager loading automatically for Mongoid, inspired by [Goldiloader](https://github.com/salsify/goldiloader).
 
-TODO: Description
+## Usage
 
-## Features
-
-## Examples
-
-    require 'mongoload'
-
-## Requirements
+Just install Mongoload. It will automatically eager load your reference relation the first time you access it.
 
 ## Install
 
+Add this line to your application's Gemfile:
+
+    gem 'mongoload'
+
+Or install it yourself as:
+
     $ gem install mongoload
+
+## TODO
+
+* option to perform eager loading when calling following methods on an many/many_to_many relation:
+  + size
+  + first
+  + last
++ option to disable eager loading on specific relation
 
 ## Copyright
 
