@@ -4,9 +4,12 @@ module Mongoload
     private
 
     def unloaded_documents
-      metadata = relation_metadata
-      Mongoload::RelationLoader.load(base, metadata)
-    rescue Errors::EagerLoad
+      if Mongoload::RelationLoader.load(base, relation_metadata)
+        base.ivar(relation_metadata.name)
+      else
+        super
+      end
+    rescue NotImplementedError
       super
     end
   end

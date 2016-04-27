@@ -8,6 +8,7 @@ module Mongoload
         auto_include?(d, metadata)
       end
       eager_load(metadata, docs)
+      docs.include?(doc)
     end
 
     def eager_load(metadata, docs)

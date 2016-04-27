@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 require 'rspec'
 require 'database_cleaner'
-require 'mongoid'
+require 'mongoload'
 
 # initialize model definitions
 ENV['MONGOID_ENV'] = 'test'
 Mongoid.load!(File.join(File.dirname(__FILE__), 'db', 'mongoid.yml'))
 require_relative 'db/models'
-# Mongo::Logger.logger = ActiveSupport::Logger.new(STDOUT) # show actual mongo loads
+Mongo::Logger.logger = ActiveSupport::Logger.new(STDOUT) # show actual mongo loads
 
 RSpec.configure do |config|
   config.before(:suite) do

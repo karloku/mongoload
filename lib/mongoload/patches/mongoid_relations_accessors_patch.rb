@@ -10,7 +10,18 @@ module Mongoload
         Mongoload::RelationLoader.load(self, metadata) if !object.is_a?(metadata.klass) && ivar(name) == false
       end
 
-      super
+      result = super
+      result.tap do |relation|
+        if relation.class == Mongoid::Relations::Targets::Enumerable
+          relation.target.define_singleton_method :relation_metadata do
+            relation.relation_metadata
+          end
+
+          relation.target.define_singleton_method :base do
+            relation.base
+          end
+        end
+      end
     end
   end
 end
