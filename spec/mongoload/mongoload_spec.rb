@@ -3,13 +3,13 @@ require 'spec_helper'
 
 describe Mongoload do
   let(:user1) do
-    User.create!(username: 'Adam') { |u| u.create_device(uuid: '111') }
+    User.create!(username: 'Adam').tap { |u| u.create_device(uuid: '111') }
   end
   let(:user2) do
-    User.create!(username: 'Betty') { |u| u.create_device(uuid: '222') }
+    User.create!(username: 'Betty').tap { |u| u.create_device(uuid: '222') }
   end
   let(:user3) do
-    User.create!(username: 'Cathy') { |u| u.create_device(uuid: '333') }
+    User.create!(username: 'Cathy').tap { |u| u.create_device(uuid: '333') }
   end
 
   let(:tag1) { Tag.create!(name: 'tag1') }
@@ -18,40 +18,39 @@ describe Mongoload do
   let(:tag4) { Tag.create!(name: 'tag4') }
 
   let(:post1) do
-    Post.create!(title: 'post1') do |p|
-      p.user = user1
+    Post.create!(title: 'post1', user: user1).tap do |p|
       p.tags << [tag1, tag2]
     end
   end
 
   let(:post2) do
-    Post.create!(title: 'post2') do |p|
-      p.user = user1
-    end.tags << [tag2, tag3]
+    Post.create!(title: 'post2', user: user1).tap do |p|
+      p.tags << [tag2, tag3]
+    end
   end
 
   let(:post3) do
-    Post.create!(title: 'post3') do |p|
-      p.user = user2
-    end.tags << [tag1, tag3]
+    Post.create!(title: 'post3', user: user2).tap do |p|
+      p.tags << [tag1, tag3]
+    end
   end
 
   let(:post4) do
-    Post.create!(title: 'post4') do |p|
-      p.user = user2
-    end.tags << [tag2, tag4]
+    Post.create!(title: 'post4', user: user2).tap do |p|
+      p.tags << [tag2, tag4]
+    end
   end
 
   let(:post5) do
-    Post.create!(title: 'post5') do |p|
-      p.user = user3
-    end.tags << [tag1, tag4]
+    Post.create!(title: 'post5', user: user3).tap do |p|
+      p.tags << [tag1, tag4]
+    end
   end
 
   let(:post6) do
-    Post.create!(title: 'post6') do |p|
-      p.user = user3
-    end.tags << [tag2, tag4]
+    Post.create!(title: 'post6', user: user3).tap do |p|
+      p.tags << [tag2, tag4]
+    end
   end
 
   describe 'has_one relation' do

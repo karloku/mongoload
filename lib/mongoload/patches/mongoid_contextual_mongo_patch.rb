@@ -4,6 +4,12 @@ module Mongoload
     def documents_for_iteration
       results = super
       if results.is_a?(Mongo::Collection::View)
+        require 'byebug'
+        begin
+          results.to_a
+        rescue SystemStackError
+          byebug
+        end
         results = results.map { |doc| Mongoid::Factory.from_db(klass, doc, criteria.options[:fields]) }
       end
       results.tap do |documents|
