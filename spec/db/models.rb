@@ -17,14 +17,14 @@ end
 class Post
   include Mongoid::Document
   belongs_to :user
-  has_and_belongs_to_many :tags, fully_load: true
+  has_and_belongs_to_many :tags
 
   field :title
 end
 
 class Tag
   include Mongoid::Document
-  has_and_belongs_to_many :posts
+  has_and_belongs_to_many :posts, fully_load: true
 
   field :name
 end

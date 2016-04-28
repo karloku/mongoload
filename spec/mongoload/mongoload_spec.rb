@@ -12,11 +12,14 @@ describe Mongoload do
     User.create!(username: 'Cathy').tap { |u| u.create_device(uuid: '333') }
   end
   let(:build_users) { [user1, user2, user3] }
+  let(:users) { User.all.to_a }
+  let(:devices) { Device.all.to_a }
 
   let(:tag1) { Tag.create!(name: 'tag1') }
   let(:tag2) { Tag.create!(name: 'tag2') }
   let(:tag3) { Tag.create!(name: 'tag3') }
   let(:tag4) { Tag.create!(name: 'tag4') }
+  let(:tags) { Tag.all.to_a }
 
   let(:post1) do
     Post.create!(title: 'post1', user: user1).tap do |p|
@@ -49,12 +52,12 @@ describe Mongoload do
     end
   end
   let(:build_posts) { [post1, post2, post3, post4, post5, post6] }
+  let(:posts) { Post.all.to_a }
 
   describe 'has_one relation' do
     before { build_users }
 
     it 'should eager load' do
-      users = User.all.to_a
       users.each do |user|
         expect(user.ivar(:device)).to be false
       end
@@ -70,7 +73,6 @@ describe Mongoload do
     before { build_posts }
 
     it 'should eager load' do
-      users = User.all.to_a
       users.each do |user|
         expect(user.posts._loaded?).to be false
       end
@@ -87,7 +89,6 @@ describe Mongoload do
       before { build_users }
 
       it 'should eager load' do
-        devices = Device.all.to_a
         devices.each do |device|
           expect(device.ivar(:user)).to be false
         end
@@ -103,7 +104,6 @@ describe Mongoload do
       before { build_posts }
 
       it 'should eager load' do
-        posts = Post.all.to_a
         posts.each do |post|
           expect(post.ivar(:user)).to be false
         end
@@ -120,7 +120,6 @@ describe Mongoload do
     before { build_posts }
 
     it 'should eager load' do
-      posts = Post.all.to_a
       posts.each do |post|
         expect(post.tags._loaded?).to be false
       end
@@ -134,8 +133,8 @@ describe Mongoload do
 
   describe 'auto_include' do
     before { build_users }
-    context 'set to false' do
-      before do 
+    context 'is set to false' do
+      before do
         UserWithoutAutoInclude = User.clone
         UserWithoutAutoInclude.has_one :device, auto_include: false
       end
@@ -148,6 +147,42 @@ describe Mongoload do
         users.first.device
         users[1..-1].each do |user|
           expect(user.ivar(:device)).to be false
+        end
+      end
+    end
+  end
+
+  describe 'fully_load' do
+    before { build_posts }
+    let(:access_first_tag_posts_with) { proc { |method| tags.first.posts.public_send(method) } }
+    let(:access_first_post_tags_with) { proc { |method| posts.first.tags.public_send(method) } }
+
+    context 'is set to true' do
+      %w(first last size empty?).each do |method|
+        it "should eager load with ##{method}" do
+          tags.each do |tag|
+            expect(tag.posts._loaded?).to be false
+          end
+
+          access_first_tag_posts_with[method]
+          tags.each do |tag|
+            expect(tag.posts._loaded?).to be true
+          end
+        end
+      end
+    end
+
+    context 'is set to false' do
+      %w(first last size empty?).each do |method|
+        it "should not eager load with ##{method}" do
+          posts.each do |post|
+            expect(post.tags._loaded?).to be false
+          end
+
+          access_first_post_tags_with[method]
+          posts[1..-1].each do |post|
+            expect(post.tags._loaded?).to be false
+          end
         end
       end
     end
