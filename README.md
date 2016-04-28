@@ -1,5 +1,5 @@
 # Mongoload
-
+[![Gem Version](https://badge.fury.io/rb/mongoload.svg)](https://badge.fury.io/rb/mongoload)
 [![Build Status](https://travis-ci.org/karloku/mongoload.svg?branch=master)](https://travis-ci.org/karloku/mongoload)
 
 Mongoload is a gem to perform eager loading automatically for Mongoid, inspired by [Goldiloader](https://github.com/salsify/goldiloader).
