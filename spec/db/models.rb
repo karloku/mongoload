@@ -17,7 +17,7 @@ end
 class Post
   include Mongoid::Document
   belongs_to :user
-  has_and_belongs_to_many :tags
+  has_and_belongs_to_many :tags, fully_load: true
 
   field :title
 end

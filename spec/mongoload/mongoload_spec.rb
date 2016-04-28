@@ -11,6 +11,7 @@ describe Mongoload do
   let(:user3) do
     User.create!(username: 'Cathy').tap { |u| u.create_device(uuid: '333') }
   end
+  let(:build_users) { [user1, user2, user3] }
 
   let(:tag1) { Tag.create!(name: 'tag1') }
   let(:tag2) { Tag.create!(name: 'tag2') }
@@ -22,39 +23,35 @@ describe Mongoload do
       p.tags << [tag1, tag2]
     end
   end
-
   let(:post2) do
     Post.create!(title: 'post2', user: user1).tap do |p|
       p.tags << [tag2, tag3]
     end
   end
-
   let(:post3) do
     Post.create!(title: 'post3', user: user2).tap do |p|
       p.tags << [tag1, tag3]
     end
   end
-
   let(:post4) do
     Post.create!(title: 'post4', user: user2).tap do |p|
       p.tags << [tag2, tag4]
     end
   end
-
   let(:post5) do
     Post.create!(title: 'post5', user: user3).tap do |p|
       p.tags << [tag1, tag4]
     end
   end
-
   let(:post6) do
     Post.create!(title: 'post6', user: user3).tap do |p|
       p.tags << [tag2, tag4]
     end
   end
+  let(:build_posts) { [post1, post2, post3, post4, post5, post6] }
 
   describe 'has_one relation' do
-    before { user1 && user2 && user3 }
+    before { build_users }
 
     it 'should eager load' do
       users = User.all.to_a
@@ -70,7 +67,7 @@ describe Mongoload do
   end
 
   describe 'has_many relation' do
-    before { post1 && post2 && post3 && post4 && post5 && post6 }
+    before { build_posts }
 
     it 'should eager load' do
       users = User.all.to_a
@@ -87,7 +84,7 @@ describe Mongoload do
 
   describe 'belongs_to' do
     context 'inverse of has_one' do
-      before { user1 && user2 && user3 }
+      before { build_users }
 
       it 'should eager load' do
         devices = Device.all.to_a
@@ -103,7 +100,7 @@ describe Mongoload do
     end
 
     context 'inverse of has_many' do
-      before { post1 && post2 && post3 && post4 && post5 && post6 }
+      before { build_posts }
 
       it 'should eager load' do
         posts = Post.all.to_a
@@ -120,7 +117,7 @@ describe Mongoload do
   end
 
   describe 'has_and_belongs_to_many' do
-    before { post1 && post2 && post3 && post4 && post5 && post6 }
+    before { build_posts }
 
     it 'should eager load' do
       posts = Post.all.to_a
@@ -131,6 +128,24 @@ describe Mongoload do
       posts.first.tags.to_a
       posts.each do |post|
         expect(post.tags._loaded?).to be true
+      end
+    end
+  end
+
+  describe 'auto_include' do
+    before { build_users }
+    context 'set to false' do
+      before { User.has_one :device, auto_include: false }
+      it 'should not eager load' do
+        users = User.all.to_a
+        users.each do |user|
+          expect(user.ivar(:device)).to be false
+        end
+
+        users.first.device
+        users[1..-1].each do |user|
+          expect(user.ivar(:device)).to be false
+        end
       end
     end
   end

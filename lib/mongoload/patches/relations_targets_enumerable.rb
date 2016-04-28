@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Mongoload
-  module MongoRelationsEnumerableWithAutoInclude
+  module RelationsEnumerableWithAutoInclude
     private
 
     def unloaded_documents
@@ -15,4 +15,4 @@ module Mongoload
   end
 end
 
-Mongoid::Relations::Targets::Enumerable.prepend Mongoload::MongoRelationsEnumerableWithAutoInclude
+Mongoid::Relations::Targets::Enumerable.prepend Mongoload::RelationsEnumerableWithAutoInclude

@@ -16,7 +16,7 @@ module Mongoload
     end
 
     def auto_include?(doc, metadata)
-      relation?(doc, metadata) && !loaded?(doc, metadata)
+      metadata.auto_include? && relation?(doc, metadata) && !loaded?(doc, metadata)
     end
 
     def relation?(doc, metadata)

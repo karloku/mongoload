@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Mongoload
-  module MongoRelationsAccessorsWithAutoInclude
+  module RelationsAccessorsWithAutoInclude
     private
 
     def get_relation(name, metadata, object, reload=false)
@@ -26,4 +26,4 @@ module Mongoload
   end
 end
 
-Mongoid::Document.prepend Mongoload::MongoRelationsAccessorsWithAutoInclude
+Mongoid::Document.prepend Mongoload::RelationsAccessorsWithAutoInclude
