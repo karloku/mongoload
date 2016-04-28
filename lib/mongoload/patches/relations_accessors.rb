@@ -1,6 +1,20 @@
 # frozen_string_literal: true
 module Mongoload
   module RelationsAccessorsWithAutoInclude
+    private_class_method
+
+    def self.assign_missing_proxy_method(relation)
+      if relation.class == Mongoid::Relations::Targets::Enumerable
+        relation.target.define_singleton_method :relation_metadata do
+          relation.relation_metadata
+        end
+
+        relation.target.define_singleton_method :base do
+          relation.base
+        end
+      end
+    end
+
     private
 
     def get_relation(name, metadata, object, reload=false)
@@ -12,15 +26,7 @@ module Mongoload
 
       result = super
       result.tap do |relation|
-        if relation.class == Mongoid::Relations::Targets::Enumerable
-          relation.target.define_singleton_method :relation_metadata do
-            relation.relation_metadata
-          end
-
-          relation.target.define_singleton_method :base do
-            relation.base
-          end
-        end
+        Mongoload::RelationsAccessorsWithAutoInclude.assign_missing_proxy_method(relation)
       end
     end
   end
