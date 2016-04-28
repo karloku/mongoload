@@ -135,9 +135,12 @@ describe Mongoload do
   describe 'auto_include' do
     before { build_users }
     context 'set to false' do
-      before { User.has_one :device, auto_include: false }
+      before do 
+        UserWithoutAutoInclude = User.clone
+        UserWithoutAutoInclude.has_one :device, auto_include: false
+      end
       it 'should not eager load' do
-        users = User.all.to_a
+        users = UserWithoutAutoInclude.all.to_a
         users.each do |user|
           expect(user.ivar(:device)).to be false
         end
