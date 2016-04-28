@@ -153,18 +153,17 @@ describe Mongoload do
   end
 
   describe 'fully_load' do
+    FULLY_LOAD_METHODS = %w(first last size empty?).freeze
     before { build_posts }
-    let(:access_first_tag_posts_with) { proc { |method| tags.first.posts.public_send(method) } }
-    let(:access_first_post_tags_with) { proc { |method| posts.first.tags.public_send(method) } }
 
     context 'is set to true' do
-      %w(first last size empty?).each do |method|
+      FULLY_LOAD_METHODS.each do |method|
         it "should eager load with ##{method}" do
           tags.each do |tag|
             expect(tag.posts._loaded?).to be false
           end
 
-          access_first_tag_posts_with[method]
+          tags.first.posts.public_send(method)
           tags.each do |tag|
             expect(tag.posts._loaded?).to be true
           end
@@ -173,13 +172,13 @@ describe Mongoload do
     end
 
     context 'is set to false' do
-      %w(first last size empty?).each do |method|
+      FULLY_LOAD_METHODS.each do |method|
         it "should not eager load with ##{method}" do
           posts.each do |post|
             expect(post.tags._loaded?).to be false
           end
 
-          access_first_post_tags_with[method]
+          posts.first.tags.public_send(method)
           posts[1..-1].each do |post|
             expect(post.tags._loaded?).to be false
           end
