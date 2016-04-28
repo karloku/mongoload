@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Mongoload
-  module MongoContextWithAutoInclude
+  module ContextWithAutoInclude
     def documents_for_iteration
       results = super
       if results.is_a?(Mongo::Collection::View)
@@ -13,4 +13,4 @@ module Mongoload
   end
 end
 
-Mongoid::Contextual::Mongo.prepend Mongoload::MongoContextWithAutoInclude
+Mongoid::Contextual::Mongo.prepend Mongoload::ContextWithAutoInclude

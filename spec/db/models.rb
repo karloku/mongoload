@@ -24,7 +24,7 @@ end
 
 class Tag
   include Mongoid::Document
-  has_and_belongs_to_many :posts
+  has_and_belongs_to_many :posts, fully_load: true
 
   field :name
 end
